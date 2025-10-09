@@ -1,0 +1,37 @@
+{% extends "base.jinja" %}
+{% block title %}Users{% endblock title %}
+{% block body %}
+<div class="mx-auto container">
+
+    <h1 class="text-4xl font-bold my-4">Users</h1>
+
+    {# Card #}
+    <div class="bg-neutral-50 rounded-md shadow-md overflow-hidden">
+        {# Table #}
+        <table class="w-full">
+            {# Header #}
+            <thead class="font-bold bg-purple-500 text-neutral-50">
+                <tr>
+                    <th class="py-1 px-4 text-left">Last Name</th>
+                    <th class="py-1 pr-4 text-left">First Name</th>
+                    <th class="py-1 pr-4 text-left">Email</th>
+                    <th class="py-1 pr-10 text-left w-px">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody >
+                {% for user in users %}
+                <tr class="even:bg-[oklch(94.6%_0_0)]">
+                    <td class="py-1 pl-4">{{user.last_name}}</td>
+                    <td>{{user.first_name}}</td>
+                    <td>{{user.email}}</td>
+                    <td class="pr-4">
+                        <a href="#" class="text-blue-600 hover:text-blue-800 hover:underline">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock body %}
