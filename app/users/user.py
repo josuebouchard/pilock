@@ -1,16 +1,22 @@
+from typing import override
 import attrs
 
 
-@attrs.define(slots=True)
+@attrs.define(slots=True, eq=False)
 class User:
-    id: int = attrs.field(eq=True, hash=True)
-    first_name: str = attrs.field(eq=False, hash=False)
-    last_name: str = attrs.field(eq=False, hash=False)
+    id: int
+    first_name: str
+    last_name: str
     email: str = attrs.field(
         validator=attrs.validators.matches_re(r"^[^@]+@[^@]+\.[^@]+$"),
-        eq=False,
-        hash=False,
     )
+
+    @override
+    def __eq__(self, other: object):
+        if isinstance(other, User):
+            return self.id == other.id
+
+        return NotImplemented
 
     def sortable_name(self):
         return f"{self.last_name}, {self.first_name}"
