@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request, responses
+
 from templates import templates
 
 router = APIRouter(

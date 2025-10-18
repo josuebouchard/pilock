@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Request, responses
-from app.users.dependencies import UserRepositoryDep
+
+from app.users.models import get_users
+from db import SessionDep
 from templates import templates
 
 router = APIRouter(
@@ -9,8 +11,8 @@ router = APIRouter(
 
 
 @router.get("/", name="users:index")
-def index(request: Request, user_repository: UserRepositoryDep):
-    users = user_repository.get_users()
+def index(request: Request, session: SessionDep):
+    users = get_users(session)
     return templates.TemplateResponse(
         request,
         name="user_management/index.jinja",
