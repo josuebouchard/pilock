@@ -1,0 +1,68 @@
+{# Input macro #}
+
+{% macro input_field(name, label, type='text', form=None, errors=None, required=False, value=None, placeholder='',
+input_classes='') -%}
+{% set val = (form[name] if form and form.get(name) else (value if value is not none else '')) %}
+{% set err = (errors.get(name) if errors else None) %}
+{% set field_id = name %}
+
+<div>
+  <label for="{{ field_id }}" id="{{ field_id }}-label"
+    class="block text-sm font-medium {{ 'text-red-700' if err else 'text-neutral-700' }}">
+    {{ label }}
+  </label>
+
+  <input id="{{ field_id }}" name="{{ name }}" type="{{ type }}" {% if required %}required{% endif %}
+    value="{{ val | e }}" placeholder="{{ placeholder }}" aria-invalid="{{ 'true' if err else 'false' }}" {% if err
+    %}aria-describedby="{{ field_id }}-error" {% endif %} class="mt-1 block w-full rounded-md border bg-white px-3 py-2 focus:outline-none focus:ring-2
+        {{ 'border-red-500 focus:ring-red-500 focus:border-red-500' if err else 'border-neutral-300 focus:ring-purple-500 focus:border-purple-500' }}
+        {{ input_classes }}" oninput="
+        // Reset label to neutral gray
+        const label = document.getElementById('{{ field_id }}-label');
+        if (label) {
+          label.classList.remove('text-red-700');
+          label.classList.add('text-neutral-700');
+        }
+
+        // Reset border and focus to default gray/purple
+        this.classList.remove('border-red-500','focus:ring-red-500','focus:border-red-500');
+        this.classList.add('border-neutral-300','focus:ring-purple-500','focus:border-purple-500');
+
+        // Remove error message if present
+        const errMsg = document.getElementById('{{ field_id }}-error');
+        if (errMsg) errMsg.remove();
+      ">
+
+  {% if err %}
+  <p id="{{ field_id }}-error" class="mt-1 text-sm text-red-600">{{ err }}</p>
+  {% endif %}
+</div>
+{%- endmacro %}
+
+
+
+{# Errors macro #}
+
+{% macro form_error_box(errors) -%}
+{% if errors and errors.get('__all__') %}
+<div class="rounded-md bg-red-50 border border-red-200 p-3 text-sm text-red-700">
+  {{ errors['__all__'] }}
+</div>
+{% endif %}
+{%- endmacro %}
+
+{# Breadcrumb macro #}
+
+{% macro breadcrumb(links=[], current=None) -%}
+<nav class="text-sm mb-4">
+  {% for link in links %}
+  <a href="{{ link.url }}" class="text-blue-600 hover:underline">{{ link.label }}</a>
+  {% if not loop.last or current %}
+  <span class="mx-2 text-neutral-400">/</span>
+  {% endif %}
+  {% endfor %}
+  {% if current %}
+  <span class="text-neutral-600">{{ current }}</span>
+  {% endif %}
+</nav>
+{%- endmacro %}
