@@ -5,12 +5,12 @@
 
     <div class="flex justify-between">
         <div class="my-4">
-            <h1 class="text-4xl font-bold">Tags</h1>
+            <h1 class="text-4xl font-bold">Access Logs</h1>
         </div>
 
         <div class="flex items-center">
-            <a href="{{url_for('tags:create-ui')}}" class="bg-purple-500 px-3 py-2 rounded-xl text-neutral-50 font-bold">
-                + Create new tag
+            <a href="#" class="bg-purple-500 px-3 py-2 rounded-xl text-neutral-50 font-bold">
+                Download CSV
             </a>
         </div>
     </div>
@@ -25,19 +25,19 @@
                     <th class="py-1 px-4 text-left">Organization ID</th>
                     <th class="py-1 px-4 text-left">Last Name</th>
                     <th class="py-1 pr-4 text-left">First Name</th>
-                    <th class="py-1 pr-10 text-left w-px">Actions</th>
+                    <th class="py-1 pr-4 text-left">Timestamp</th>
+                    <th class="py-1 pr-4 text-left">Tag ID</th>
                 </tr>
             </thead>
 
             <tbody>
-                {% for tag in tags %}
+                {% for log in logs %}
                 <tr class="even:bg-[oklch(94.6%_0_0)]">
-                    <td class="py-1 pl-4">{{tag.org_id}}</td>
-                    <td>{{tag.last_name}}</td>
-                    <td>{{tag.first_name}}</td>
-                    <td class="pr-4">
-                        <a href="#" class="text-blue-600 hover:text-blue-800 hover:underline">Edit</a>
-                    </td>
+                    <td class="py-1 pl-4">{{log.org_id}}</td>
+                    <td>{{log.last_name}}</td>
+                    <td>{{log.first_name}}</td>
+                    <td>{{log.timestamp}}</td>
+                    <td>{{log.tag_id}}</td>
                 </tr>
                 {% endfor %}
             </tbody>

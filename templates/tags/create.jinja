@@ -4,11 +4,11 @@
 
 {% block body %}
 <div class="mx-auto container ">
-    <h1 class="text-4xl font-bold my-4">New user</h1>
+    <h1 class="text-4xl font-bold my-4">New Tag</h1>
 
     {{
     breadcrumb(
-    links=[{"url": request.url_for('users:index-ui'), "label": "Users"}, ],
+    links=[{"url": request.url_for('tags:index-ui'), "label": "Tags"}, ],
     current="New",
     )
     }}
@@ -20,22 +20,19 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {{ input_field('last_name', 'Last Name', form=form, errors=errors, required=True) }}
                 {{ input_field('first_name', 'First Name', form=form, errors=errors, required=True) }}
-                <div class="md:col-span-2">
-                    {{ input_field('email', 'Email', type='email', form=form, errors=errors, required=True) }}
-                </div>
+                {{ input_field('org-id', 'Organization ID', form=form, errors=errors, required=True) }}
+                {{ input_field('tag-id', 'Tag ID', form=form, errors=errors, required=True) }}
             </div>
 
             {{ form_error_box(errors) }}
 
-
-
             <div class="flex items-center gap-3">
                 <button type="submit" class="inline-flex items-center rounded-md bg-purple-600 px-4 py-2 font-medium text-neutral-50
                  hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500">
-                    Create user
+                    Create tag
                 </button>
 
-                <a href="#" class="inline-flex items-center rounded-md border border-neutral-300 bg-white px-4 py-2 font-medium
+                <a href="{{url_for('tags:index-ui')}}" class="inline-flex items-center rounded-md border border-neutral-300 bg-white px-4 py-2 font-medium
                  text-neutral-700 hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-neutral-400">
                     Cancel
                 </a>
