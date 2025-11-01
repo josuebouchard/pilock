@@ -1,15 +1,15 @@
 {% from "components/macros.jinja" import input_field, form_error_box, breadcrumb %}
 {% extends "base.jinja" %}
-{% block title %}Tags - New Tag{% endblock title %}
+{% block title %}Access Logs - Download{% endblock title %}
 
 {% block body %}
 <div class="mx-auto container ">
-    <h1 class="text-4xl font-bold my-4">New Tag</h1>
+    <h1 class="text-4xl font-bold my-4">Download access logs information</h1>
 
     {{
     breadcrumb(
-    links=[{"url": request.url_for('tags:index-ui'), "label": "Tags"}, ],
-    current="New",
+    links=[{"url": request.url_for('logs:index-ui'), "label": "Logs"}, ],
+    current="Download",
     )
     }}
 
@@ -18,10 +18,8 @@
             {% if csrf_token %}<input type="hidden" name="csrf_token" value="{{ csrf_token }}">{% endif %}
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {{ input_field('last_name', 'Last Name', form=form, errors=errors, required=True) }}
-                {{ input_field('first_name', 'First Name', form=form, errors=errors, required=True) }}
-                {{ input_field('org_id', 'Organization ID', form=form, errors=errors, required=True) }}
-                {{ input_field('tag_id', 'Tag ID', form=form, errors=errors, required=True) }}
+                {{ input_field('from-date', 'From date', type="date", form=form, errors=errors, required=True) }}
+                {{ input_field('from-date', 'To date', type="date", form=form, errors=errors, required=True) }}
             </div>
 
             {{ form_error_box(errors) }}
@@ -29,10 +27,10 @@
             <div class="flex items-center gap-3">
                 <button type="submit" class="inline-flex items-center rounded-md bg-purple-600 px-4 py-2 font-medium text-neutral-50
                  hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500">
-                    Create tag
+                    Download
                 </button>
 
-                <a href="{{url_for('tags:index-ui')}}" class="inline-flex items-center rounded-md border border-neutral-300 bg-white px-4 py-2 font-medium
+                <a href="{{url_for('logs:index-ui')}}" class="inline-flex items-center rounded-md border border-neutral-300 bg-white px-4 py-2 font-medium
                  text-neutral-700 hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-neutral-400">
                     Cancel
                 </a>

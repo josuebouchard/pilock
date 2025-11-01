@@ -1,0 +1,66 @@
+{% from "components/macros.jinja" import input_field, form_error_box, breadcrumb %}
+{% extends "base.jinja" %}
+{% block title %}Tags - Edit tag{% endblock title %}
+
+{% block body %}
+<script>
+    function confirmAndSubmit(formId) {
+        if (confirm("Are you sure you want to delete this tag?")) {
+            document.getElementById(formId).submit();
+        }
+    }
+</script>
+
+<div class="mx-auto container ">
+    <h1 class="text-4xl font-bold my-4">Edit Tag</h1>
+
+    {{
+    breadcrumb(
+    links=[{"url": request.url_for('tags:index-ui'), "label": "Tags"}, ],
+    current="Edit",
+    )
+    }}
+
+    <div class="bg-neutral-50 rounded-md shadow-md">
+        <form action="#" method="post" class="p-6 space-y-6" novalidate>
+            {% if csrf_token %}<input type="hidden" name="csrf_token" value="{{ csrf_token }}">{% endif %}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{ input_field('last_name', 'Last Name', form=form, errors=errors, required=True) }}
+                {{ input_field('first_name', 'First Name', form=form, errors=errors, required=True) }}
+                {{ input_field('org_id', 'Organization ID', form=form, errors=errors, required=True) }}
+                {{ input_field('tag_id', 'Tag ID', form=form, errors=errors, required=True) }}
+            </div>
+
+            {{ form_error_box(errors) }}
+
+            <div class="flex justify-between">
+                <div class="flex items-center gap-3">
+                    <button type="submit" class="inline-flex items-center rounded-md bg-purple-600 px-4 py-2 font-medium text-neutral-50
+                 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        Save changes
+                    </button>
+
+                    <a href="{{url_for('tags:index-ui')}}" class="inline-flex items-center rounded-md border border-neutral-300 bg-white px-4 py-2 font-medium
+                 text-neutral-700 hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-neutral-400">
+                        Cancel
+                    </a>
+                </div>
+
+                <button type="button" class="inline-flex items-center rounded-md border border-neutral-300 bg-red-600 px-4 py-2
+                    font-medium text-neutral-50" onclick="confirmAndSubmit('delete-form')">
+                    Delete tag
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Separate hidden form for deletion -->
+    <form id="delete-form" action="#" method="post"
+        style="display: none;">
+        {% if csrf_token %}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        {% endif %}
+    </form>
+</div>
+{% endblock body %}

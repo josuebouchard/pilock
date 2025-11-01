@@ -1,5 +1,5 @@
 {% extends "base.jinja" %}
-{% block title %}Tags{% endblock title %}
+{% block title %}Access Logs{% endblock title %}
 {% block body %}
 <div class="mx-auto container">
 
@@ -9,7 +9,7 @@
         </div>
 
         <div class="flex items-center">
-            <a href="#" class="bg-purple-500 px-3 py-2 rounded-xl text-neutral-50 font-bold">
+            <a href="{{url_for('logs:download-ui')}}" class="bg-purple-500 px-3 py-2 rounded-xl text-neutral-50 font-bold">
                 Download CSV
             </a>
         </div>
