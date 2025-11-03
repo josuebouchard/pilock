@@ -14,14 +14,14 @@
     }}
 
     <div class="bg-neutral-50 rounded-md shadow-md">
-        <form action="#" method="post" class="p-6 space-y-6" novalidate>
+        <form action="{{url_for('tags:create')}}" method="post" class="p-6 space-y-6" novalidate>
             {% if csrf_token %}<input type="hidden" name="csrf_token" value="{{ csrf_token }}">{% endif %}
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {{ input_field('last_name', 'Last Name', form=form, errors=errors, required=True) }}
                 {{ input_field('first_name', 'First Name', form=form, errors=errors, required=True) }}
                 {{ input_field('org_id', 'Organization ID', form=form, errors=errors, required=True) }}
-                {{ input_field('tag_id', 'Tag ID', form=form, errors=errors, required=True) }}
+                {{ input_field('tag_uid', 'Tag UID', form=form, errors=errors, required=True) }}
             </div>
 
             {{ form_error_box(errors) }}

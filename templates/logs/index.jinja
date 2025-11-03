@@ -9,7 +9,8 @@
         </div>
 
         <div class="flex items-center">
-            <a href="{{url_for('logs:download-ui')}}" class="bg-purple-500 px-3 py-2 rounded-xl text-neutral-50 font-bold">
+            <a href="{{url_for('logs:download-ui')}}"
+                class="bg-purple-500 px-3 py-2 rounded-xl text-neutral-50 font-bold">
                 Download CSV
             </a>
         </div>
@@ -22,22 +23,22 @@
             {# Header #}
             <thead class="font-bold bg-purple-500 text-neutral-50">
                 <tr>
+                    <th class="py-1 px-4 text-left">Tag UID</th>
                     <th class="py-1 px-4 text-left">Organization ID</th>
                     <th class="py-1 px-4 text-left">Last Name</th>
-                    <th class="py-1 pr-4 text-left">First Name</th>
+                    <th class="py-1 px-4 text-left">First Name</th>
                     <th class="py-1 pr-4 text-left">Timestamp</th>
-                    <th class="py-1 pr-4 text-left">Tag ID</th>
                 </tr>
             </thead>
 
             <tbody>
                 {% for log in logs %}
                 <tr class="even:bg-[oklch(94.6%_0_0)]">
-                    <td class="py-1 pl-4">{{log.org_id}}</td>
+                    <td class="py-1 pl-4">{{log.tag_uid}}</td>
+                    <td>{{log.org_id}}</td>
                     <td>{{log.last_name}}</td>
                     <td>{{log.first_name}}</td>
                     <td>{{log.timestamp}}</td>
-                    <td>{{log.tag_id}}</td>
                 </tr>
                 {% endfor %}
             </tbody>

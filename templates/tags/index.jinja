@@ -9,7 +9,8 @@
         </div>
 
         <div class="flex items-center">
-            <a href="{{url_for('tags:create-ui')}}" class="bg-purple-500 px-3 py-2 rounded-xl text-neutral-50 font-bold">
+            <a href="{{url_for('tags:create-ui')}}"
+                class="bg-purple-500 px-3 py-2 rounded-xl text-neutral-50 font-bold">
                 + Create new tag
             </a>
         </div>
@@ -25,7 +26,7 @@
                     <th class="py-1 px-4 text-left">Organization ID</th>
                     <th class="py-1 px-4 text-left">Last Name</th>
                     <th class="py-1 pr-4 text-left">First Name</th>
-                    <th class="py-1 pr-4 text-left">Tag ID</th>
+                    <th class="py-1 pr-4 text-left">Tag UID</th>
                     <th class="py-1 pr-10 text-left w-px">Actions</th>
                 </tr>
             </thead>
@@ -36,9 +37,10 @@
                     <td class="py-1 pl-4">{{tag.org_id}}</td>
                     <td>{{tag.last_name}}</td>
                     <td>{{tag.first_name}}</td>
-                    <td>{{tag.tag_id}}</td>
+                    <td>{{tag.tag_uid}}</td>
                     <td class="pr-4">
-                        <a href="#" class="text-blue-600 hover:text-blue-800 hover:underline">Edit</a>
+                        <a href="{{url_for('tags:edit-ui', tag_id=tag.id)}}"
+                            class="text-blue-600 hover:text-blue-800 hover:underline">Edit</a>
                     </td>
                 </tr>
                 {% endfor %}
