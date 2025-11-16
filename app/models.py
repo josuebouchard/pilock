@@ -10,8 +10,6 @@ class PersonInformation(SQLModel):
 
 
 class _TagBase(PersonInformation):
-    # TODO: should only hold UPPERCASE characters
-    # TODO: should only accept "hex-strings"
     tag_uid: str
 
 
@@ -19,6 +17,9 @@ class Tag(_TagBase, table=True):
     __tablename__: Any = "tags"  # pyright: ignore[reportExplicitAny]
 
     id: int | None = Field(default=None, primary_key=True)
+
+    def person_information(self):
+        return PersonInformation.model_construct(**self.model_dump())  # pyright: ignore[reportAny]
 
 
 class TagEdit(_TagBase):

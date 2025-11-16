@@ -41,15 +41,13 @@ def get_access_logs(session: Session):
 def create_access_log(
     tag_uid: str,
     access_was_granted: bool,
-    personal_information: PersonInformation | None,
+    person_information: PersonInformation | None,
     session: Session,
 ):
-    access_log = AccessLog(
-        tag_uid=tag_uid, access_was_granted=access_was_granted
-    )
+    access_log = AccessLog(tag_uid=tag_uid, access_was_granted=access_was_granted)
 
-    if personal_information is not None:
-        _ = access_log.sqlmodel_update(personal_information)
+    if person_information is not None:
+        _ = access_log.sqlmodel_update(person_information)
 
     # {"tag_uid": tag_uid, "access_was_granted": access_was_granted}
     session.add(access_log)
