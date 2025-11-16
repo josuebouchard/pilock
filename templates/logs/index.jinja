@@ -28,6 +28,7 @@
                     <th class="py-1 px-4 text-left">Last Name</th>
                     <th class="py-1 px-4 text-left">First Name</th>
                     <th class="py-1 pr-4 text-left">Timestamp</th>
+                    <th class="py-1 pr-4 text-left">Access Granted</th>
                 </tr>
             </thead>
 
@@ -39,6 +40,7 @@
                     <td>{{log.last_name}}</td>
                     <td>{{log.first_name}}</td>
                     <td>{{log.timestamp}}</td>
+                    <td>{{log.access_was_granted}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
