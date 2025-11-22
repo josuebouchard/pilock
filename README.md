@@ -9,3 +9,23 @@ While the current design emphasizes affordability and proof-of-concept implement
 ## Report
 
 The full final report can be [read here](/final_report.pdf).
+
+## Running the code
+
+In all cases it requires that you are placed on the corresponding folder.
+
+### Controller software
+
+```bash
+uv run main.py
+```
+
+### Management web server
+
+```bash
+# Web Interface Server
+uv run uvicorn app.main:app --host=0.0.0.0 --port=8080
+
+# Controller API
+uv run uvicorn app.controller_api:app --host=127.0.0.1 --port=3000
+```
