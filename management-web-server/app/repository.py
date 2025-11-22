@@ -1,3 +1,4 @@
+from datetime import datetime
 from .models import AccessLog, PersonInformation, Tag
 from sqlmodel import Session, col, select
 
@@ -33,8 +34,17 @@ def disable_tag(tag_id: int, session: Session):
     session.commit()
 
 
-def get_access_logs(session: Session):
+def get_access_logs(
+    session: Session,
+    from_datetime: datetime | None = None,
+    to_datetime: datetime | None = None,
+):
     stmt = select(AccessLog).order_by(col(AccessLog.timestamp).desc())
+    if from_datetime:
+        stmt = stmt.where(AccessLog.timestamp >= from_datetime)
+    if to_datetime:
+        stmt = stmt.where(AccessLog.timestamp <= to_datetime)
+
     return session.exec(stmt).all()
 
 

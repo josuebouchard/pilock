@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "**/templates/*/*.jinja": "jinja-html"
+    },
+    "emmet.includeLanguages": {
+        "jinja-html": "html"
+    },
+    "tailwindCSS.includeLanguages": {
+        "jinja-html": "html"
+    },
+    "editor.quickSuggestions": {
+        "strings": "on"
+    },
+    "explorer.excludeGitIgnore": true,
+    "python.analysis.typeCheckingMode": "off" // lets suggestions appear inside class=""
+}

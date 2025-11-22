@@ -1,7 +1,10 @@
+from datetime import datetime
 from typing import Annotated
-from fastapi import FastAPI, Form, Request, APIRouter, status
+from fastapi import FastAPI, Form, Request, APIRouter, status, Response
 from fastapi.responses import RedirectResponse
 from templates import templates
+import csv
+import io
 
 # === START CREATE DB TABLES ===
 from db import SessionDep, create_db_and_tables
@@ -24,57 +27,6 @@ def index(request: Request):
 
 # Tags
 tag_router = APIRouter(prefix="/tags")
-
-test_tags = [
-    {
-        "org_id": "V12345678",
-        "first_name": "Richard",
-        "last_name": "Magnuson",
-        "tag_id": "6bd29c694c",
-    },
-    {
-        "org_id": "V98765432",
-        "first_name": "Maria",
-        "last_name": "Lopez",
-        "tag_id": "1fa45e72b3",
-    },
-    {
-        "org_id": "V13579246",
-        "first_name": "James",
-        "last_name": "Chen",
-        "tag_id": "9c3e11a9d8",
-    },
-    {
-        "org_id": "V24681357",
-        "first_name": "Sofia",
-        "last_name": "Martinez",
-        "tag_id": "45de77c112",
-    },
-    {
-        "org_id": "V55588833",
-        "first_name": "Omar",
-        "last_name": "Hassan",
-        "tag_id": "a7c29e4f90",
-    },
-    {
-        "org_id": "V11223344",
-        "first_name": "Liam",
-        "last_name": "Nguyen",
-        "tag_id": "0b92cd3aef",
-    },
-    {
-        "org_id": "V99887766",
-        "first_name": "Chloe",
-        "last_name": "Bennett",
-        "tag_id": "d23af64b9e",
-    },
-    {
-        "org_id": "V44332211",
-        "first_name": "Noah",
-        "last_name": "Khan",
-        "tag_id": "8ac59e20c4",
-    },
-]
 
 
 @tag_router.get("/", name="tags:index-ui")
@@ -164,7 +116,9 @@ logs_router = APIRouter(prefix="/logs")
 
 
 @logs_router.get("/download", name="logs:download-ui")
-def access_log_download(request: Request):
+def access_log_download_ui(
+    request: Request,
+):
     return templates.TemplateResponse(
         request,
         name="logs/download.jinja",
@@ -172,78 +126,58 @@ def access_log_download(request: Request):
     )
 
 
-test_logs = [
-    {
-        "org_id": "V98765432",
-        "first_name": "Maria",
-        "last_name": "Lopez",
-        "timestamp": "2025-10-31 12:10:42",
-        "tag_id": "1fa45e72b3",
-    },
-    {
-        "org_id": "V12345678",
-        "first_name": "Richard",
-        "last_name": "Magnuson",
-        "timestamp": "2025-10-31 12:05:17",
-        "tag_id": "6bd29c694c",
-    },
-    {
-        "org_id": "V44332211",
-        "first_name": "Noah",
-        "last_name": "Khan",
-        "timestamp": "2025-10-31 11:55:33",
-        "tag_id": "8ac59e20c4",
-    },
-    {
-        "org_id": "V98765432",
-        "first_name": "Maria",
-        "last_name": "Lopez",
-        "timestamp": "2025-10-31 11:32:08",
-        "tag_id": "1fa45e72b3",
-    },
-    {
-        "org_id": "V99887766",
-        "first_name": "Chloe",
-        "last_name": "Bennett",
-        "timestamp": "2025-10-31 11:10:35",
-        "tag_id": "d23af64b9e",
-    },
-    {
-        "org_id": "V12345678",
-        "first_name": "Richard",
-        "last_name": "Magnuson",
-        "timestamp": "2025-10-31 10:55:02",
-        "tag_id": "6bd29c694c",
-    },
-    {
-        "org_id": "V55588833",
-        "first_name": "Omar",
-        "last_name": "Hassan",
-        "timestamp": "2025-10-31 10:42:59",
-        "tag_id": "a7c29e4f90",
-    },
-    {
-        "org_id": "V24681357",
-        "first_name": "Sofia",
-        "last_name": "Martinez",
-        "timestamp": "2025-10-31 10:15:22",
-        "tag_id": "45de77c112",
-    },
-    {
-        "org_id": "V13579246",
-        "first_name": "James",
-        "last_name": "Chen",
-        "timestamp": "2025-10-31 10:02:47",
-        "tag_id": "9c3e11a9d8",
-    },
-    {
-        "org_id": "V12345678",
-        "first_name": "Richard",
-        "last_name": "Magnuson",
-        "timestamp": "2025-10-31 09:23:12",
-        "tag_id": "6bd29c694c",
-    },
-]
+@logs_router.post("/download", name="logs:download")
+def access_log_download(
+    from_date: Annotated[datetime, Form()],
+    to_date: Annotated[datetime, Form()],
+    session: SessionDep,
+):
+    access_logs = get_access_logs(
+        session,
+        from_datetime=from_date,
+        to_datetime=to_date,
+    )
+    # Build CSV in memory
+    buffer = io.StringIO()
+    writer = csv.writer(buffer)
+
+    # CSV Header
+    writer.writerow(
+        [
+            "id",
+            "tag_uid",
+            "access_was_granted",
+            "timestamp",
+            "org_id",
+            "first_name",
+            "last_name",
+        ]
+    )
+
+    # CSV Rows
+    for log in access_logs:
+        writer.writerow(
+            [
+                log.id,
+                log.tag_uid,
+                log.access_was_granted,
+                log.timestamp.isoformat() if log.timestamp else "",
+                log.org_id or "",
+                log.first_name or "",
+                log.last_name or "",
+            ]
+        )
+
+    # Retrieve CSV string
+    csv_text = buffer.getvalue()
+    buffer.close()
+
+    # Return file as CSV download
+    return Response(
+        content=csv_text,
+        media_type="text/csv",
+        headers={"Content-Disposition": 'attachment; filename="access_logs.csv"'},
+    )
 
 
 @logs_router.get("/", name="logs:index-ui")
