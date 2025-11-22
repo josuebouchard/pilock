@@ -18,8 +18,8 @@
             {% if csrf_token %}<input type="hidden" name="csrf_token" value="{{ csrf_token }}">{% endif %}
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {{ input_field('from-date', 'From date', type="date", form=form, errors=errors, required=True) }}
-                {{ input_field('from-date', 'To date', type="date", form=form, errors=errors, required=True) }}
+                {{ input_field('from_date', 'From date', type="date", form=form, errors=errors, required=True) }}
+                {{ input_field('to_date', 'To date', type="date", form=form, errors=errors, required=True) }}
             </div>
 
             {{ form_error_box(errors) }}

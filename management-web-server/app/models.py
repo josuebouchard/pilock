@@ -32,7 +32,7 @@ class AccessLog(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     tag_uid: str
     access_was_granted: bool
-    timestamp: datetime | None = Field(default_factory=lambda: datetime.now(UTC))
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
     org_id: str | None = Field(default=None)
     first_name: str | None = Field(default=None)
